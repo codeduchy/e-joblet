@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import { body, validationResult, param } from 'express-validator';
 import {
   BadRequestError,
@@ -30,7 +31,7 @@ const withValidationErrors = (validateValues) => {
 };
 
 export const validateIdParam = withValidationErrors([
-  param('id').custom(async (value) => {
+  param('id').custom(async (value, { req }) => {
     const isValidId = mongoose.Types.ObjectId.isValid(value);
     if (!isValidId) throw new BadRequestError('Invalid MongoDB');
     const job = await Job.findById(value);
@@ -38,7 +39,7 @@ export const validateIdParam = withValidationErrors([
     const isAdmin = req.user.role === 'admin';
     const isOwner = req.user.userId === job.createdBy.toString();
     if (!isAdmin && !isOwner) {
-      throw UnauthorizedError('Not authorized to acces this route');
+      throw UnauthorizedError('Not authorized to access this route');
     }
   }),
 ]);

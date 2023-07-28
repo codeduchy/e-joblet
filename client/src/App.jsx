@@ -20,7 +20,7 @@ import { loader as loginLoader } from './pages/DashboardLayout';
 import { loader as allJobsLoader } from './pages/AllJobs';
 import { loader as editJobLoader } from './pages/EditJob';
 import { action as editJobAction } from './pages/EditJob';
-import { action as deleteJobAction } from './pages/DeleteJob';
+import DeleteJob, { action as deleteJobAction } from './pages/DeleteJob';
 import { action as profileAction } from './pages/Profile';
 import { loader as adminLoader } from './pages/Admin';
 
@@ -63,7 +63,11 @@ const router = createBrowserRouter([
             loader: editJobLoader,
             action: editJobAction,
           },
-          { path: 'delete-job/:id', action: deleteJobAction },
+          {
+            path: 'delete-job/:id',
+            element: <DeleteJob />,
+            loader: deleteJobAction,
+          },
           { path: 'admin', element: <Admin />, loader: adminLoader },
         ],
       },
