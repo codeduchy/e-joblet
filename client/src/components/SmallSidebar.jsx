@@ -9,7 +9,6 @@ import { useContext } from 'react';
 
 const SmallSidebar = () => {
   const { showSmallSidebar, toggleSmallSidebar } = useContext(DashboardContext);
-  console.log(showSmallSidebar);
   return (
     <Wrapper>
       <div

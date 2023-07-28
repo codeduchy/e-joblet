@@ -1,7 +1,13 @@
 import { body, validationResult, param } from 'express-validator';
-import { BadRequestError, NotFoundError } from '../errors/customErrors.js';
+import {
+  BadRequestError,
+  NotFoundError,
+  UnauthenticatedError,
+  UnauthorizedError,
+} from '../errors/customErrors.js';
 import { JOB_TYPE, JOB_STATUS } from '../utils/constants.js';
 import Job from '../models/JobModel.js';
+import User from '../models/UserModel.js';
 
 const withValidationErrors = (validateValues) => {
   return [
@@ -13,12 +19,61 @@ const withValidationErrors = (validateValues) => {
         if (errorMessages[0].startsWith('No job')) {
           throw new NotFoundError(errorMessages);
         }
+        if (errorMessages[0].startsWith('Not authorized')) {
+          throw new UnauthenticatedError('Not authorized to access this route');
+        }
         throw new BadRequestError(errorMessages);
       }
       next();
     },
   ];
 };
+
+export const validateIdParam = withValidationErrors([
+  param('id').custom(async (value) => {
+    const isValidId = mongoose.Types.ObjectId.isValid(value);
+    if (!isValidId) throw new BadRequestError('Invalid MongoDB');
+    const job = await Job.findById(value);
+    if (!job) throw new NotFoundError(`No job with id: ${value}`);
+    const isAdmin = req.user.role === 'admin';
+    const isOwner = req.user.userId === job.createdBy.toString();
+    if (!isAdmin && !isOwner) {
+      throw UnauthorizedError('Not authorized to acces this route');
+    }
+  }),
+]);
+
+export const validateRegisterInput = withValidationErrors([
+  body('name').trim().notEmpty().withMessage('Name is required'),
+  body('email')
+    .trim()
+    .notEmpty()
+    .withMessage('Invalid email format')
+    .custom(async (email) => {
+      const user = await User.findOne({ email });
+      if (user) {
+        throw new BadRequestError('Email already exists');
+      }
+    }),
+  body('password')
+    .trim()
+    .notEmpty()
+    .withMessage('Password is required')
+    .isLength({ min: 8 })
+    .withMessage('Password must be at least 8 characters long'),
+  body('location').trim().notEmpty().withMessage('Location is required'),
+  body('lastName').trim().notEmpty().withMessage('Last name is required'),
+]);
+
+export const validateLoginInput = withValidationErrors([
+  body('email')
+    .trim()
+    .notEmpty()
+    .withMessage('Email is required')
+    .isEmail()
+    .withMessage('Invalid email format'),
+  body('password').notEmpty().withMessage('Password is required'),
+]);
 
 export const validateJobInput = withValidationErrors([
   body('company').trim().notEmpty().withMessage('Company is required'),
@@ -30,11 +85,19 @@ export const validateJobInput = withValidationErrors([
   body('jobType').isIn(Object.values(JOB_TYPE)).withMessage('Invalid job type'),
 ]);
 
-export const validateIdParam = withValidationErrors([
-  param('id').custom(async (value) => {
-    const isValidId = mongoose.Types.ObjectId.isValid(value);
-    if (!isValidId) throw new BadRequestError('Invalid MongoDB');
-    const job = await Job.findById(value);
-    if (!job) throw new NotFoundError('No job with id: ${value}');
-  }),
+export const validateUpdateUserInput = withValidationErrors([
+  body('name').notEmpty().withMessage('name is required'),
+  body('email')
+    .notEmpty()
+    .withMessage('email is required')
+    .isEmail()
+    .withMessage('invalid email format')
+    .custom(async (email, { req }) => {
+      const user = await User.findOne({ email });
+      if (user && user._id.toString() !== req.user.userId) {
+        throw new Error('email already exists');
+      }
+    }),
+  body('lastName').notEmpty().withMessage('last name is required'),
+  body('location').notEmpty().withMessage('location is required'),
 ]);

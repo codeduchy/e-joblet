@@ -20,7 +20,7 @@ const Error = () => {
     <Wrapper>
       <h1>Error</h1>
       <p>status : {error.status}</p>
-      <p>msg : {error.error.message}</p>
+      <p>msg : {error?.error?.message}</p>
     </Wrapper>
   );
 };
