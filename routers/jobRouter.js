@@ -12,10 +12,13 @@ import {
   createJob,
   updateJob,
   deleteJob,
+  showStats,
 } from '../controllers/jobController.js';
 
 router.get('/', getAllJobs);
 router.post('/', checkForTestUser, validateJobInput, createJob);
+
+router.route('/stats').get(showStats);
 
 router
   .route('/:id')

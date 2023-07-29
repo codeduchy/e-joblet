@@ -25,6 +25,7 @@ const Wrapper = styled.section`
     row-gap: 1rem;
   }
   .form-btn {
+    text-align: center;
     margin-top: 2rem;
   }
   @media (min-width: 992px) {
