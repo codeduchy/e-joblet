@@ -33,12 +33,7 @@ const AddJob = () => {
         <div className="form-center">
           <FormRow type="text" name="position" />
           <FormRow type="text" name="company" />
-          <FormRow
-            type="text"
-            labelText="job location"
-            name="jobLocation"
-            defaultValue={user.location}
-          />
+          <FormRow type="text" labelText="job location" name="jobLocation" />
           <FormRowSelect
             labelText="job status"
             name="jobStatus"

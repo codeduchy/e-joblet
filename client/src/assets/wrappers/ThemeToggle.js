@@ -10,7 +10,7 @@ const Wrapper = styled.div`
   cursor: pointer;
 
   .toggle-icon {
-    font-size: 1.15rem;
+    font-size: 1.8rem;
     color: var(--text-color);
   }
 `;

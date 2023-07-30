@@ -32,7 +32,6 @@ const Dashboard = ({ isDarkThemeEnabled }) => {
   };
   const toggleSmallSidebar = () => {
     setSmallSidebar(!showSmallSidebar);
-    console.log(123);
   };
   const toggleBigSidebar = () => {
     setBigSidebar(!showBigSidebar);
