@@ -1,14 +1,20 @@
-<h1>Job Track Application</h1>
+# Job Track Application
+
 React/Express/MongoDB/Node
 
 Visit https://e-joblet-app.onrender.com
 // (Free tier hosting, slow loading possible!!)
 
-<h3>NPM</h3>
-<h5>1. Setup project</h5>
-    <p>npm run setup-project</p>
-<h5>2. Run dev environment</h5>
-    <p>npm run dev</p>
-<hr>
-<h5>For production run</h5>
-    <p>npm run setup-production-app</p>
+### NPM
+
+**1. Setup project**
+</br>
+`npm run setup-project`
+
+**2. Run dev environment**
+</br>
+`npm run dev`
+
+**For production run**
+</br>
+`npm run setup-production-app`
