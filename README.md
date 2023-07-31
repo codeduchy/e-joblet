@@ -6,9 +6,10 @@ Visit https://e-joblet-app.onrender.com
 <h3>NPM</h3>
 
 Setup project
-1\. npm run setup-project
 
+<p>1. npm run setup-project</p>
 Run dev environment
-2\. npm run dev
-
-For production setup: npm run setup-production-app
+<p>2. npm run dev</p>
+</hr>
+For production run
+<p>3. npm run setup-production-app</p>
