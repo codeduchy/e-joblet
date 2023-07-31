@@ -14,6 +14,8 @@ import cookieParser from 'cookie-parser';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import cloudinary from 'cloudinary';
+import helmet from 'helmet';
+import mongoSanitize from 'express-mongo-sanitize';
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -30,10 +32,8 @@ if (process.env.NODE_ENV === 'development') {
 app.use(express.static(path.resolve(__dirname, './client/dist')));
 app.use(express.json());
 app.use(cookieParser());
-
-app.get('/api/v1/test', (req, res) => {
-  res.json({ msg: 'test route' });
-});
+app.use(helmet());
+app.use(mongoSanitize());
 
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', authenticateUser, userRouter);
