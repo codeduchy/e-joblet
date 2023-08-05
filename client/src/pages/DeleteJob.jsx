@@ -12,7 +12,6 @@ export const action =
     } catch (error) {
       toast.error(error?.response?.data?.msg);
     }
-
     return redirect('/dashboard/all-jobs');
   };
 
